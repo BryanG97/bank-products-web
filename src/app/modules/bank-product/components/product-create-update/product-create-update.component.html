@@ -1,12 +1,14 @@
 <div class="create-update">
-    <h1>Crear/Actualizar Producto</h1>
-
-    <hr>
 
     <form class="form"
         #resultForm="ngForm"
         (ngSubmit)="clickForm(resultForm)"
         autocomplete="off">
+
+        <h1 *ngIf="mode === 'edit'">Formulario de Edición</h1>
+        <h1 *ngIf="mode === 'create'">Formulario de Registro</h1>
+
+        <hr>
 
         <div class="form-grid">
             
@@ -15,7 +17,10 @@
                 <input type="text" id="id" name="id" 
                     [(ngModel)]="product.id"
                     #id="ngModel"
-                    maxlength="10" minlength="3" required>
+                    maxlength="10" 
+                    minlength="3" 
+                    [disabled]="isDisable"
+                    required>
                 <span class="error-message" *ngIf="id.errors?.['required'] && id.touched">
                     Este campo es requerido.
                 </span>
@@ -98,7 +103,7 @@
 
         <div class="form-actions">
             <button type="reset" class="btn-cancel">Reiniciar</button>
-            <button type="submit" class="btn-yellow">Guardar</button>
+            <button type="submit" class="btn-yellow">{{ mode === 'edit' ? 'Actualizar' : 'Guardar' }}</button>
         </div>
 
     </form>

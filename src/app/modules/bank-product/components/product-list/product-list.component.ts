@@ -18,9 +18,19 @@ import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 export class ProductListComponent {
 
   productList: ProductVo[];
-  filteredProductList: ProductVo[];
   totalList: number;
+
+  filteredProductList: ProductVo[];
   private searchSubject = new Subject<string>();
+
+  openDropdownId?: string;
+  showDeleteModal: boolean = false;
+  productToDelete?: ProductVo;
+
+  paginatedList: ProductVo[];
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+  totalPages: number = 1;
 
   constructor(
     private productService: ProductService,
@@ -28,6 +38,7 @@ export class ProductListComponent {
   ) {
     this.productList = [];
     this.filteredProductList = [];
+    this.paginatedList = [];
     this.totalList = 0;
     this.setupSearch();
    }
@@ -46,6 +57,7 @@ export class ProductListComponent {
           this.productList = response.data;
           this.filteredProductList = response.data;
           this.totalList = response.data.length;
+          this.updatePagination();
         }
       },
       error: (error) => {
@@ -79,6 +91,7 @@ export class ProductListComponent {
       );
       this.totalList = this.filteredProductList.length;
     }
+    this.updatePagination();
   }
 
   /**
@@ -94,7 +107,109 @@ export class ProductListComponent {
    * Method to show screen to create product
    */
   createProduct() {
-    this.router.navigate(['/product-create-update']);
+    this.router.navigate(['/product-create-update'], { 
+      queryParams: { mode: 'create' } 
+    });
+  }
+
+  /**
+   * Method to show screen to edit product
+   */
+  editProduct(product: ProductVo) {
+    this.openDropdownId = undefined;
+    this.router.navigate(['/product-create-update'], { 
+      queryParams: { mode: 'edit', product: JSON.stringify(product) } 
+    });
+  }
+
+  /**
+   * Toggle dropdown menu
+   */
+  toggleDropdown(productId: string) {
+    this.openDropdownId = this.openDropdownId === productId ? undefined : productId;
+  }
+
+  /**
+   * Delete product
+   */
+  deleteProduct(product: ProductVo) {
+    this.openDropdownId = undefined;
+    this.productToDelete = product;
+    this.showDeleteModal = true;
+  }
+
+  /**
+   * Confirm delete product
+   */
+  confirmDelete() {
+    if (this.productToDelete) {
+      this.productService.deleteProduct(this.productToDelete.id).subscribe({
+        next: (response) => {
+          alert('Producto eliminado exitosamente.');
+          this.getAllProducts();
+          this.closeDeleteModal();
+        },
+        error: (error) => {
+          console.error('Error eliminando producto:', error);
+          alert('Error al eliminar el producto.');
+          this.closeDeleteModal();
+        }
+      });
+    }
+  }
+
+  /**
+   * Close delete modal
+   */
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+    this.productToDelete = undefined;
+  }
+
+  /**
+   * Update pagination
+   */
+  updatePagination() {
+    this.totalPages = Math.ceil(this.filteredProductList.length / this.itemsPerPage);
+    this.currentPage = 1;
+    this.updatePaginatedList();
+  }
+
+  /**
+   * Update paginated list
+   */
+  updatePaginatedList() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedList = this.filteredProductList.slice(startIndex, endIndex);
+  }
+
+  /**
+   * Change items per page
+   */
+  onItemsPerPageChange(event: any) {
+    this.itemsPerPage = parseInt(event.target.value);
+    this.updatePagination();
+  }
+
+  /**
+   * Go to previous page
+   */
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePaginatedList();
+    }
+  }
+
+  /**
+   * Go to next page
+   */
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePaginatedList();
+    }
   }
 
 }

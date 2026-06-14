@@ -29,7 +29,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let product of filteredProductList">
+            <tr *ngFor="let product of paginatedList">
               <td class="column-center">
                 <img class="product-logo" [src]="product.logo" alt="Logo del producto">
               </td>
@@ -37,7 +37,19 @@
               <td>{{ product.description }}</td>
               <td class="column-center">{{ product.date_release | date:'dd/MM/yyyy' }}</td>
               <td class="column-center">{{ product.date_revision | date:'dd/MM/yyyy' }}</td>
-              <td></td>
+              
+              <td class="column-center">
+                <div class="dropdown">
+                  <button class="dropdown-btn" (click)="toggleDropdown(product.id || '')">
+                    ⋮
+                  </button>
+                  <div class="dropdown-content" [class.show]="openDropdownId === product.id">
+                    <a href="#" (click)="editProduct(product); $event.preventDefault()">Editar</a>
+                    <a href="#" (click)="deleteProduct(product); $event.preventDefault()">Eliminar</a>
+                  </div>
+                </div>
+              </td>
+              
             </tr>
           </tbody>
         </table>
@@ -48,13 +60,31 @@
             <span>{{this.totalList}} Resultados</span>
         </div>
         
+        <div class="pagination-nav">
+            <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">Anterior</button>
+            <span class="page-info">Página {{currentPage}} de {{totalPages}}</span>
+            <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+        </div>
+        
         <div class="results-per-page">
-            <select id="results-select">
+            <select id="results-select" (change)="onItemsPerPageChange($event)" [value]="itemsPerPage">
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="20">20</option>
-                <option value="50">50</option>
             </select>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación de eliminación -->
+    <div class="delete-modal" [class.show]="showDeleteModal">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>¿Está seguro de eliminar el producto "<strong>{{ productToDelete?.name }}</strong>"?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" (click)="closeDeleteModal()">Cancelar</button>
+                <button class="btn-delete" (click)="confirmDelete()">Eliminar</button>
+            </div>
         </div>
     </div>
 </div>

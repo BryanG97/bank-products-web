@@ -40,4 +40,23 @@ export class ProductService {
     return this.http.get(`${this.apiUrl}/verification/${id}`);
   }
 
+  /**
+   * Update bank product
+   * @param id Product ID
+   * @param product Product data
+   * @returns Update product
+   */
+  public updateProduct(id?: string, product?: ProductVo): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, product);
+  }
+
+  /**
+   * Delete bank product
+   * @param id Product ID
+   * @returns Delete product
+   */
+  public deleteProduct(id?: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
 }
