@@ -50,6 +50,7 @@
 .btn-cancel {
   display: flex;
   align-items: center;
+  justify-content: center;
   background: #c9ced3;
   color: black;
   border: none;
@@ -58,11 +59,13 @@
   cursor: pointer;
   font-size: 14px;
   width: 100%;
+  
 }
 
 .btn-delete {
   display: flex;
   align-items: center;
+  justify-content: center;
   background: #ffd700;
   color: black;
   border: none;

@@ -84,9 +84,13 @@
                     [(ngModel)]="product.date_release"
                     #dateRelease="ngModel"
                     (ngModelChange)="calculateRevisionDate($event)"
+                    [min]="minDate"
                     required>
                 <span class="error-message" *ngIf="dateRelease.errors?.['required'] && dateRelease.touched">
                     Este campo es requerido.
+                </span>
+                <span class="error-message" *ngIf="dateRelease.errors?.['min'] && dateRelease.touched">
+                    La fecha debe ser mayor o igual a la fecha actual.
                 </span>
             </div>
             
@@ -102,7 +106,7 @@
 
 
         <div class="form-actions">
-            <button type="reset" class="btn-cancel">Reiniciar</button>
+            <button type="button" class="btn-cancel" (click)="resetForm()">Reiniciar</button>
             <button type="submit" class="btn-yellow">{{ mode === 'edit' ? 'Actualizar' : 'Guardar' }}</button>
         </div>
 

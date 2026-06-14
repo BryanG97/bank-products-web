@@ -304,8 +304,7 @@ describe('ProductListComponent', () => {
   describe('onSearchChange', () => {
     it('should handle search input change', () => {
       const mockEvent = { target: { value: 'test search' } } as any;
-      
-      // No podemos espiar searchSubject porque es privado, pero podemos probar que no lanza error
+
       expect(() => component.onSearchChange(mockEvent)).not.toThrow();
     });
   });

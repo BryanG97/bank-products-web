@@ -23,6 +23,7 @@ export class ProductCreateUpdateComponent {
   mode: string = 'create';
   productData?: ProductVo;
   isDisable: boolean = false;
+  minDate: string;
 
   constructor(
     private productService: ProductService,
@@ -31,6 +32,7 @@ export class ProductCreateUpdateComponent {
   ) {
     this.product = new ProductVo();
     this.revisionDateDisplay = '';
+    this.minDate = this.getTodayDateString();
   }
 
   ngOnInit(): void {
@@ -45,6 +47,17 @@ export class ProductCreateUpdateComponent {
   }
 
   /**
+   * Method to get today's date in YYYY-MM-DD format
+   */
+  getTodayDateString(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
    * Method to calculate revision date (1 year after release date)
    */
   calculateRevisionDate(releaseDate: string) {
@@ -52,6 +65,21 @@ export class ProductCreateUpdateComponent {
     const revisionYear = parseInt(year) + 1;
     
     this.product.date_revision = `${revisionYear}-${month}-${day}`;
+  }
+
+  /**
+   * Method to reset
+   */
+  resetForm(): void {
+    if (this.mode === 'edit' && this.productData) {
+      const originalId = this.product.id;
+      this.product = new ProductVo();
+      this.product.id = originalId;
+      this.product.date_revision = '';
+    } else {
+      this.product = new ProductVo();
+      this.product.date_revision = '';
+    }
   }
 
   /**
