@@ -1,0 +1,106 @@
+<div class="create-update">
+    <h1>Crear/Actualizar Producto</h1>
+
+    <hr>
+
+    <form class="form"
+        #resultForm="ngForm"
+        (ngSubmit)="clickForm(resultForm)"
+        autocomplete="off">
+
+        <div class="form-grid">
+            
+            <div class="form-group">
+                <label for="id">Id</label>
+                <input type="text" id="id" name="id" 
+                    [(ngModel)]="product.id"
+                    #id="ngModel"
+                    maxlength="10" minlength="3" required>
+                <span class="error-message" *ngIf="id.errors?.['required'] && id.touched">
+                    Este campo es requerido.
+                </span>
+                <span class="error-message" *ngIf="id.errors?.['minlength'] && id.touched">
+                    El Id debe tener mínimo 3 caracteres.
+                </span>
+                <span class="error-message" *ngIf="id.errors?.['maxlength'] && id.touched">
+                    El Id debe tener máximo 10 caracteres.
+                </span>
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Nombre</label>
+                <input type="text" id="name" name="name" 
+                    [(ngModel)]="product.name"
+                    #name="ngModel"
+                    maxlength="100" minlength="5"
+                    required>
+                <span class="error-message" *ngIf="name.errors?.['required'] && name.touched">
+                    Este campo es requerido.
+                </span>
+                <span class="error-message" *ngIf="name.errors?.['minlength'] && name.touched">
+                    El nombre debe tener mínimo 5 caracteres.
+                </span>
+                <span class="error-message" *ngIf="name.errors?.['maxlength'] && name.touched">
+                    El nombre debe tener máximo 100 caracteres.
+                </span>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Descripción</label>
+                <input type="text" id="description" name="description" 
+                    [(ngModel)]="product.description"
+                    #description="ngModel"
+                    maxlength="200" minlength="10" required>
+                <span class="error-message" *ngIf="description.errors?.['required'] && description.touched">
+                    Este campo es requerido.
+                </span>
+                <span class="error-message" *ngIf="description.errors?.['minlength'] && description.touched">
+                    La descripción debe tener mínimo 10 caracteres.
+                </span>
+                <span class="error-message" *ngIf="description.errors?.['maxlength'] && description.touched">
+                    La descripción debe tener máximo 200 caracteres.
+                </span>
+            </div>
+            
+            <div class="form-group">
+                <label for="logo">Logo</label>
+                <input type="text" id="logo" name="logo" 
+                    [(ngModel)]="product.logo"
+                    #logo="ngModel"
+                    required>
+                <span class="error-message" *ngIf="logo.errors?.['required'] && logo.touched">
+                    Este campo es requerido.
+                </span>
+            </div>
+            
+            <div class="form-group">
+                <label for="dateRelease">Fecha Lanzamiento</label>
+                <input type="date" id="dateRelease" name="dateRelease" 
+                    [(ngModel)]="product.date_release"
+                    #dateRelease="ngModel"
+                    (ngModelChange)="calculateRevisionDate($event)"
+                    required>
+                <span class="error-message" *ngIf="dateRelease.errors?.['required'] && dateRelease.touched">
+                    Este campo es requerido.
+                </span>
+            </div>
+            
+            <div class="form-group">
+                <label for="dateRevision">Fecha Revisión</label>
+                <input type="date" id="dateRevision" name="dateRevision" 
+                    [value]="product.date_revision"
+                    disabled
+                    required>
+            </div>
+
+        </div>
+
+
+        <div class="form-actions">
+            <button type="reset" class="btn-cancel">Reiniciar</button>
+            <button type="submit" class="btn-yellow">Guardar</button>
+        </div>
+
+    </form>
+
+</div>

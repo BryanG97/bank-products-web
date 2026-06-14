@@ -1,13 +1,13 @@
 {
-  "name": "banck-products-web",
+  "name": "bank-products-web",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:banck-products-web": "node dist/banck-products-web/server/server.mjs"
+    "serve:ssr:bank-products-web": "node dist/bank-products-web/server/server.mjs"
   },
   "private": true,
   "dependencies": {
