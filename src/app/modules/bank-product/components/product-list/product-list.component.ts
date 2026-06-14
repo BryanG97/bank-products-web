@@ -5,12 +5,14 @@ import { ProductService } from '../../services/product.service';
 import { ResponseVo } from '../../../../shared/vo/response/response-vo';
 import { Router } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { DeleteModalComponent } from '../delete-modal/delete-modal.component';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
   imports: [
     CommonModule,
+    DeleteModalComponent,
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'
@@ -139,23 +141,26 @@ export class ProductListComponent {
   }
 
   /**
-   * Confirm delete product
+   * Handle modal confirm
    */
-  confirmDelete() {
-    if (this.productToDelete) {
-      this.productService.deleteProduct(this.productToDelete.id).subscribe({
-        next: (response) => {
-          alert('Producto eliminado exitosamente.');
-          this.getAllProducts();
-          this.closeDeleteModal();
-        },
-        error: (error) => {
-          console.error('Error eliminando producto:', error);
-          alert('Error al eliminar el producto.');
-          this.closeDeleteModal();
-        }
-      });
-    }
+  onModalConfirm(product: ProductVo) {
+    this.productService.deleteProduct(product.id).subscribe({
+      next: () => {
+        this.getAllProducts();
+        this.closeDeleteModal();
+      },
+      error: () => {
+        alert('Error al eliminar el producto.');
+        this.closeDeleteModal();
+      }
+    });
+  }
+
+  /**
+   * Handle modal cancel
+   */
+  onModalCancel() {
+    this.closeDeleteModal();
   }
 
   /**

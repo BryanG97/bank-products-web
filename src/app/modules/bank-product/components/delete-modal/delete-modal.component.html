@@ -1,0 +1,12 @@
+<!-- Delete confirm modal -->
+<div class="delete-modal" [class.show]="showModal">
+    <div class="modal-content">
+        <div class="modal-body">
+            <p>¿Está seguro de eliminar el producto "<strong>{{ productToDelete?.name }}</strong>"?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" (click)="onCancel()">Cancelar</button>
+            <button class="btn-delete" (click)="onConfirm()">Eliminar</button>
+        </div>
+    </div>
+</div>

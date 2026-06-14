@@ -20,12 +20,24 @@
         <table class="product-table">
           <thead>
             <tr>
-              <th>Logo</th>
-              <th>Nombre del producto</th>
-              <th>Descripción</th>
-              <th>Fecha de liberación</th>
-              <th>Fecha de reestructuración</th>
-              <th></th>
+                <th>Logo</th>
+                <th>Nombre del producto</th>
+                <th>
+                    Descripción
+                    <i class="fa-solid fa-info-circle" title="Descripción del producto"></i>
+                    &nbsp;
+                </th>
+                <th>
+                    Fecha de liberación
+                    <i class="fa-solid fa-info-circle" title="Fecha de liberación del producto"></i>
+                    &nbsp;
+                </th>
+                <th>
+                    Fecha de reestructuración
+                    <i class="fa-solid fa-info-circle" title="Fecha de reestructuración del producto"></i>
+                    &nbsp;
+                </th>
+                <th></th>
             </tr>
           </thead>
           <tbody>
@@ -75,16 +87,11 @@
         </div>
     </div>
 
-    <!-- Modal de confirmación de eliminación -->
-    <div class="delete-modal" [class.show]="showDeleteModal">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p>¿Está seguro de eliminar el producto "<strong>{{ productToDelete?.name }}</strong>"?</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-cancel" (click)="closeDeleteModal()">Cancelar</button>
-                <button class="btn-delete" (click)="confirmDelete()">Eliminar</button>
-            </div>
-        </div>
-    </div>
+    <!-- Delete confirm modal -->
+    <app-delete-modal 
+        [showModal]="showDeleteModal" 
+        [productToDelete]="productToDelete"
+        (confirm)="onModalConfirm($event)"
+        (cancel)="onModalCancel()">
+    </app-delete-modal>
 </div>
